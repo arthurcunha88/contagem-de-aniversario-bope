@@ -1,11 +1,12 @@
 # Aniversários do NPCP
 
-Landing page do Núcleo de Projetos de Computação da CIMATEC jr. A agenda conta o tempo até os aniversários e destaca Arthur Cunha, criador do site e CEO da operação.
+Landing page do Núcleo de Projetos de Computação da CIMATEC jr. A agenda conta o tempo até os aniversários dos membros do NPCP.
 
 ## Como funciona
 
 - Os contadores mostram dias, horas, minutos e segundos no horário de Brasília.
 - A agenda pode ser ordenada por proximidade ou alfabeticamente. A paleta é salva no navegador.
+- A agenda foi preenchida com um cruzamento da lista do NPCP e do cadastro geral. O HTML contém apenas o nome de exibição e a data anual de cada aniversário.
 - No dia do aniversário, o cartão exibe uma mensagem de parabéns. No dia seguinte, o contador passa para o próximo ano.
 - As animações respeitam a preferência de movimento reduzido do navegador.
 - O HTML inclui nomes, datas e metadados para busca e compartilhamento. O JavaScript atualiza apenas os contadores e o estado dos cartões.

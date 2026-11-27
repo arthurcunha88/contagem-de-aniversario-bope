@@ -1,15 +1,13 @@
                                                            
                                                                                         
 
-const defaults                      = [
-  { id: "alice", day: 3, month: 4 },
-  { id: "enzo", day: 15, month: 5 },
-  { id: "marcus", day: 27, month: 5 },
-  { id: "piloto", day: 30, month: 5 },
-  { id: "andre", day: 5, month: 6 },
-  { id: "arthur", day: 12, month: 8 },
-  { id: "duda", day: 20, month: 11 },
-];
+const defaults                      = [...document.querySelectorAll             ("[data-member]")].flatMap((card) => {
+  const id = card.dataset.member;
+  const date = card.querySelector("time")?.dateTime;
+  if (!id || !date) return [];
+  const [month, day] = date.split("-").map(Number);
+  return [{ id, day, month }];
+});
 const storageKey = "npcpbope:birthday-records:v1";
 
 try {
@@ -102,11 +100,7 @@ function render() {
   schedule.sort((a, b) => orderedNames ? alphabetical.compare(a.name, b.name) : a.birthday.midnight - b.birthday.midnight);
   const order = schedule.map(({ id }) => id).join(",");
   if (list && order !== currentOrder) {
-    const founder = schedule.find(({ id }) => id === "arthur");
-    if (founder) list.append(founder.card);
-    for (const { id, card } of schedule) {
-      if (id !== "arthur") list.append(card);
-    }
+    for (const { card } of schedule) list.append(card);
     currentOrder = order;
   }
   for (const { birthday, card, timer, digits, status, badge, progress } of schedule) {
