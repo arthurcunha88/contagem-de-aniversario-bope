@@ -1,6 +1,6 @@
-# CIMATEC jr | Aniversários do NPCP BOPE
+# Aniversários do NPCP
 
-Landing page do Núcleo de Projetos de Computação da CIMATEC jr para acompanhar os aniversários de Arthur Cunha e Duda Lombardi.
+Landing page do Núcleo de Projetos de Computação da CIMATEC jr para acompanhar os aniversários de André Rangel, Arthur Cunha e Duda Lombardi.
 
 ## Como funciona
 
