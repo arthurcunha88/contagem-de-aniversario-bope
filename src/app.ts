@@ -71,9 +71,7 @@ function render() {
       const digit = digits[index];
       const value = String(number).padStart(2, "0");
       if (digit.textContent === value) return;
-      digit.classList.remove("tick");
       digit.textContent = value;
-      requestAnimationFrame(() => digit.classList.add("tick"));
     });
   }
 }
@@ -83,34 +81,15 @@ setInterval(render, 1000);
 document.addEventListener("visibilitychange", render);
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const art = document.querySelector<HTMLElement>(".art");
 const reveal = document.querySelectorAll<HTMLElement>(".section-head, .card");
 
-if (typeof IntersectionObserver === "function") {
-  const observer = new IntersectionObserver((entries) => {
+if (!reducedMotion.matches && typeof IntersectionObserver === "function") {
+  const observer = new IntersectionObserver((entries, activeObserver) => {
     for (const entry of entries) {
-      entry.target.classList.toggle("in-view", entry.isIntersecting);
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add("in-view");
+      activeObserver.unobserve(entry.target);
     }
   }, { threshold: 0.14 });
   reveal.forEach((element) => observer.observe(element));
-}
-
-if (art) {
-  let frame = 0;
-  function moveField() {
-    if (frame) return;
-    frame = requestAnimationFrame(() => {
-      frame = 0;
-      if (reducedMotion.matches) {
-        art?.style.removeProperty("--field-shift");
-        return;
-      }
-      const offset = Math.min(window.scrollY * 0.1, 35);
-      art?.style.setProperty("--field-shift", `${offset}px`);
-      art?.style.setProperty("--radar-turn", `${window.scrollY * 0.24}deg`);
-    });
-  }
-  window.addEventListener("scroll", moveField, { passive: true });
-  reducedMotion.addEventListener("change", moveField);
-  moveField();
 }
