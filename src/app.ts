@@ -64,7 +64,8 @@ function render() {
     card.classList.toggle("today", celebrating);
     if (celebrating !== timer.hidden) {
       timer.hidden = celebrating;
-      status.textContent = celebrating ? "Feliz aniversário!" : "Contagem regressiva";
+      status.hidden = !celebrating;
+      status.textContent = celebrating ? "Missão do dia: apagar as velas. Feliz aniversário!" : "";
     }
     remaining?.forEach((number, index) => {
       const digit = digits[index];
@@ -106,6 +107,7 @@ if (art) {
       }
       const offset = Math.min(window.scrollY * 0.1, 35);
       art?.style.setProperty("--field-shift", `${offset}px`);
+      art?.style.setProperty("--radar-turn", `${window.scrollY * 0.24}deg`);
     });
   }
   window.addEventListener("scroll", moveField, { passive: true });
