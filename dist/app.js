@@ -76,9 +76,8 @@ const cards = defaults.flatMap(({ id, month, day }) => {
 });
 
 const list = document.querySelector("#birthdays");
-const sortButton = document.querySelector                   (".sort-button");
+const sort = document.querySelector                   (".sort-select");
 const alphabetical = new Intl.Collator("pt-BR");
-let orderedNames = false;
 let currentOrder = "";
 const filters = document.querySelector             (".agenda-filters");
 const filterButtons = [...document.querySelectorAll                   (".agenda-filter")];
@@ -96,13 +95,9 @@ for (const button of filterButtons) {
   });
 }
 
-if (sortButton) {
-  sortButton.hidden = false;
-  sortButton.addEventListener("click", () => {
-    orderedNames = !orderedNames;
-    sortButton.setAttribute("aria-pressed", String(orderedNames));
-    render();
-  });
+if (sort) {
+  sort.closest("label")?.removeAttribute("hidden");
+  sort.addEventListener("change", render);
 }
 
 function render() {
@@ -112,7 +107,7 @@ function render() {
     birthday: timeUntilBirthday(entry.month, entry.day, now),
   }));
   const next = Math.min(...schedule.flatMap(({ birthday }) => birthday.digits ? [birthday.midnight] : []));
-  schedule.sort((a, b) => orderedNames ? alphabetical.compare(a.name, b.name) : a.birthday.midnight - b.birthday.midnight);
+  schedule.sort((a, b) => sort?.value === "alphabetical" ? alphabetical.compare(a.name, b.name) : a.birthday.midnight - b.birthday.midnight);
   const order = schedule.map(({ id }) => id).join(",");
   if (list && order !== currentOrder) {
     const founder = schedule.find(({ id }) => id === "arthur");
@@ -125,7 +120,7 @@ function render() {
   let visible = 0;
   for (const { birthday, card, timer, digits, status, badge, progress } of schedule) {
     const withinThirtyDays = birthday.midnight - now.getTime() <= 30 * 86400000;
-    const featured = card.classList.contains("leadership") || card.classList.contains("founder");
+    const featured = card.classList.contains("leadership") || card.classList.contains("founder") || card.dataset.affiliation === "DEX";
     const matches = activeFilter === "all" || (activeFilter === "soon" && withinThirtyDays) ||
       (activeFilter === "featured" && featured);
     card.hidden = !matches;
@@ -197,25 +192,6 @@ function updateHero() {
 window.addEventListener("scroll", updateHero, { passive: true });
 reducedMotion.addEventListener("change", updateHero);
 updateHero();
-
-const paletteToggle = document.querySelector                   (".palette-toggle");
-const paletteLabel = document.querySelector(".palette-label");
-const paletteKey = "npcpbope:palette";
-function setPalette(night         ) {
-  document.documentElement.dataset.palette = night ? "night" : "olive";
-  paletteToggle?.setAttribute("aria-pressed", String(night));
-  paletteToggle?.setAttribute("aria-label", night ? "Ativar paleta verde" : "Ativar paleta noturna");
-  if (paletteLabel) paletteLabel.textContent = night ? "Modo verde" : "Modo noturno";
-}
-if (paletteToggle) {
-  paletteToggle.hidden = false;
-  try { setPalette(localStorage.getItem(paletteKey) === "night"); } catch { /* optional preference */ }
-  paletteToggle.addEventListener("click", () => {
-    const night = document.documentElement.dataset.palette !== "night";
-    setPalette(night);
-    try { localStorage.setItem(paletteKey, night ? "night" : "olive"); } catch { /* optional preference */ }
-  });
-}
 
 const signal = document.querySelector                   (".signal");
 const reception = document.querySelector(".reception");

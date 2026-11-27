@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR" data-palette="olive">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,7 +23,6 @@
     <a class="brand" href="#inicio"><img src="capacete-npcp.png" width="32" height="32" alt=""> NPCP <span>BOPE</span></a>
     <div class="top-actions">
       <a href="#agenda">Agenda</a>
-      <button type="button" class="palette-toggle" aria-label="Ativar paleta noturna" aria-pressed="false" hidden><span aria-hidden="true">◐</span> <span class="palette-label">Modo noturno</span></button>
     </div>
   </header>
   <main class="shell" id="inicio">
@@ -44,7 +43,13 @@
     <section id="agenda" aria-labelledby="agenda-title">
       <div class="section-heading" data-reveal>
         <div><p class="kicker">Horário de Brasília</p><h2 id="agenda-title">Próximos eventos</h2></div>
-        <button class="sort-button" type="button" aria-pressed="false" hidden>Ordem alfabética</button>
+        <label class="sort-control" hidden>
+          <span>Ordenar</span>
+          <select class="sort-select">
+            <option value="temporal">Ordem temporal</option>
+            <option value="alphabetical">Ordem alfabética</option>
+          </select>
+        </label>
       </div>
       <div class="agenda-filters" role="group" aria-label="Filtrar aniversários" hidden>
         <button class="agenda-filter" type="button" data-filter="all" aria-pressed="true" aria-controls="birthdays"><span class="filter-emblem emblem-all" aria-hidden="true"></span>Todos</button>
@@ -54,9 +59,9 @@
       <p class="filter-result" role="status" hidden></p>
       <div class="birthday-list" id="birthdays">
         <!-- Birthdays are in HTML so dates remain readable without JavaScript. -->
-        <article class="birthday founder" data-reveal data-member="arthur" data-full-name="Arthur Andrade Cunha" style="--portrait-position:100% 0%;--portrait-hue:0deg">
+        <article class="birthday founder" data-reveal data-member="arthur" data-full-name="Arthur Andrade Cunha" data-affiliation="DEX" data-profile-role="Criador do site · CEO da operação · DEX" style="--portrait-position:100% 0%;--portrait-hue:0deg">
           <div class="birthday-heading">
-            <p class="kicker founder-label">Criador do site · CEO da operação</p>
+            <p class="kicker founder-label">Criador do site · CEO da operação · DEX</p>
             <h3>Arthur Cunha</h3><time datetime="08-12">12 de agosto</time>
           </div>
           <p class="status" hidden></p>
@@ -73,8 +78,9 @@
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
-        <article class="birthday has-portrait" data-reveal data-member="alice" data-full-name="" style="--portrait-position:0% 0%;--portrait-hue:0deg">
+        <article class="birthday has-portrait" data-reveal data-member="alice" data-full-name="" data-affiliation="DEX" data-profile-role="DEX" style="--portrait-position:0% 0%;--portrait-hue:0deg">
           <div class="birthday-heading">
+            <p class="kicker affiliation">DEX</p>
             <h3>Alice Alves</h3><time datetime="04-03">3 de abril</time>
           </div>
           <p class="status" hidden></p>
@@ -91,8 +97,9 @@
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
-        <article class="birthday has-portrait" data-reveal data-member="marcus" data-full-name="" style="--portrait-position:100% 0%;--portrait-hue:14deg">
+        <article class="birthday has-portrait" data-reveal data-member="marcus" data-full-name="" data-affiliation="DEX" data-profile-role="DEX" style="--portrait-position:100% 0%;--portrait-hue:14deg">
           <div class="birthday-heading">
+            <p class="kicker affiliation">DEX</p>
             <h3>Marcus Costa</h3><time datetime="05-27">27 de maio</time>
           </div>
           <p class="status" hidden></p>
@@ -146,9 +153,9 @@
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
-        <article class="birthday has-portrait leadership" data-reveal data-member="pedro" data-full-name="Pedro Henrique Mascarenhas de Andrade" data-profile-role="Gerência do NPCP" style="--portrait-position:50% 0%;--portrait-hue:16deg">
+        <article class="birthday has-portrait leadership" data-reveal data-member="pedro" data-full-name="Pedro Henrique Mascarenhas de Andrade" data-affiliation="DEX" data-profile-role="Gerência do NPCP · DEX" style="--portrait-position:50% 0%;--portrait-hue:16deg">
           <div class="birthday-heading">
-            <p class="leadership-tag"><span aria-hidden="true">✦</span> Gerência do NPCP</p>
+            <p class="leadership-tag"><span aria-hidden="true">✦</span> Gerência do NPCP · DEX</p>
             <h3>Pedro Mascarenhas</h3><time datetime="08-04">4 de agosto</time>
           </div>
           <p class="status" hidden></p>
@@ -192,7 +199,7 @@
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
-        <article class="birthday has-portrait" data-reveal data-member="amanda" data-full-name="Amanda Gama Lordello" data-profile-role="DEX" style="--portrait-position:0% 0%;--portrait-hue:19deg">
+        <article class="birthday has-portrait" data-reveal data-member="amanda" data-full-name="Amanda Gama Lordello" data-affiliation="DEX" data-profile-role="DEX" style="--portrait-position:0% 0%;--portrait-hue:19deg">
           <div class="birthday-heading">
             <p class="kicker affiliation">DEX</p>
             <h3>Amanda Lordello</h3><time datetime="08-20">20 de agosto</time>
@@ -210,7 +217,6 @@
       <form method="dialog"><button type="submit" class="dialog-close" aria-label="Fechar perfil" autofocus>×</button></form>
       <div class="portrait-stage" aria-hidden="true">
         <span class="member-portrait"></span>
-        <span class="profile-emblem">✦</span>
       </div>
       <div class="member-details">
         <p class="kicker member-role">Perfil do membro</p>
