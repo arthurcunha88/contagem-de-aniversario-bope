@@ -137,6 +137,17 @@ setInterval(render, 1000);
 document.addEventListener("visibilitychange", render);
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const insigniaGrid = document.querySelector(".insignia-grid");
+if (insigniaGrid) {
+  const badges = Array.from({ length: 40 }, (_, index) => {
+    const badge = document.createElement("span");
+    badge.className = "insignia";
+    badge.dataset.reveal = "";
+    badge.style.backgroundPosition = `${(index % 10) * 100 / 9}% ${Math.floor(index / 10) * 100 / 3}%`;
+    return badge;
+  });
+  insigniaGrid.append(...badges);
+}
 const reveal = document.querySelectorAll<HTMLElement>("[data-reveal]");
 
 if (typeof IntersectionObserver === "function") {
@@ -147,10 +158,11 @@ if (typeof IntersectionObserver === "function") {
         directions.set(entry.target, entry.boundingClientRect.top < 0 ? -1 : 1);
       } else if (!reducedMotion.matches) {
         const distance = (directions.get(entry.target) ?? 1) * 21;
+        const isInsignia = entry.target.classList.contains("insignia");
         entry.target.animate([
           { opacity: .48, transform: `translateY(${distance}px) scale(.985)` },
           { opacity: 1, transform: "translateY(0) scale(1)" },
-        ], { duration: 480, easing: "cubic-bezier(.19, 1, .22, 1)" });
+        ], { duration: 480, delay: isInsignia ? entries.indexOf(entry) % 8 * 26 : 0, easing: "cubic-bezier(.19, 1, .22, 1)", fill: "backwards" });
       }
     }
   }, { threshold: 0.14 });
