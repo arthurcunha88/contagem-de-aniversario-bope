@@ -75,9 +75,15 @@ h2 { font: 820 clamp(2.2rem, 5.6vw, 4.2rem)/.98 var(--display); letter-spacing: 
 .birthday { position: relative; isolation: isolate; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 22px; overflow: hidden; border: 1px solid var(--panel-border); border-radius: 24px; padding: clamp(17px, 2.7vw, 28px); background: var(--panel); transition: border-color .25s, background-color .35s, box-shadow .25s; }
 .birthday.upcoming, .birthday.today { border-color: var(--accent); }
 .birthday:hover { box-shadow: 0 8px 25px #0004; }
+.birthday:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
 h3 { font-size: clamp(1.45rem, 2.8vw, 2.15rem); line-height: 1.05; letter-spacing: -.04em; overflow-wrap: anywhere; }
 time { display: inline-block; color: var(--muted); margin-top: 8px; }
 .next-birthday { display: inline-block; width: fit-content; color: var(--button-ink); background: var(--accent); font: .74rem var(--mono); border-radius: 999px; padding: 4px 9px; margin-bottom: 9px; }
+.founder { grid-column: 1 / -1; min-height: 245px; align-items: start; background: var(--hero-shade); }
+.founder::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, var(--hero-shade) 5%, transparent 95%), url("arthur-corporal.jpg") 75% 35% / cover; }
+.founder h3 { font-size: clamp(2.05rem, 5vw, 3.65rem); }
+.founder-label { margin-bottom: 10px; }
+.founder .timer, .founder .year-progress { width: min(100%, 360px); }
 .timer { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; gap: 6px; }
 .timer span { text-align: center; background: var(--page); border-radius: 12px; padding: 7px 3px; color: var(--muted); font-size: .8rem; }
 .timer b { display: block; color: var(--ink); font: 700 clamp(1.1rem, 2.9vw, 1.65rem) var(--mono); font-variant-numeric: tabular-nums; }
@@ -89,16 +95,27 @@ footer { padding-bottom: clamp(24px, 5vw, 64px); }
 .insignia-grid { margin-top: 17px; display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 5px; }
 .insignia { display: block; aspect-ratio: 1; background: url("emblemas-npcp.png") no-repeat; background-size: 1000% 400%; transition: filter .2s, transform .25s; }
 .insignia:hover { transform: translateY(-5px) rotate(-6deg); filter: brightness(1.22); }
-.birthday.has-portrait .birthday-heading { position: relative; max-width: 100%; padding-right: 72px; min-height: 81px; }
+.birthday.has-portrait .birthday-heading { max-width: 100%; padding-right: 72px; min-height: 81px; }
 .birthday.has-portrait .birthday-heading::after {
-  content: ""; position: absolute; right: 0; top: 0; width: 61px; aspect-ratio: 1;
+  content: ""; position: absolute; right: clamp(17px, 2.7vw, 28px); top: clamp(17px, 2.7vw, 28px); width: 61px; aspect-ratio: 1;
   border: 1px solid var(--panel-border); border-radius: 15px;
   background: url("equipe-npcp.jpg") no-repeat; background-size: 300% 200%;
-  background-position: var(--portrait-x, 0%) var(--portrait-y, 0%);
+  background-position: var(--portrait-position, 0% 0%);
+  filter: hue-rotate(var(--portrait-hue, 0deg));
 }
-[data-member="piloto"] { --portrait-y: 100%; }
-[data-member="andre"] { --portrait-x: 50%; --portrait-y: 100%; }
-[data-member="duda"] { --portrait-x: 100%; --portrait-y: 100%; }
+.open-profile { display: block; margin-top: 9px; padding: 0; border: 0; background: none; color: var(--accent); font: .82rem var(--mono); text-decoration: underline; text-underline-offset: 3px; }
+.open-profile::after { content: ""; position: absolute; z-index: 1; inset: 0; border-radius: 24px; }
+.member-dialog { width: min(480px, calc(100vw - 32px)); padding: 0; color: var(--ink); background: var(--panel); border: 1px solid var(--panel-border); border-radius: 25px; }
+.member-dialog::backdrop { background: #080b08bb; backdrop-filter: blur(4px); }
+.member-dialog[open] { animation: profile-enter .28s cubic-bezier(.2, .8, .2, 1); }
+@keyframes profile-enter { from { opacity: 0; transform: translateY(12px) scale(.98); } }
+.member-profile { position: relative; display: grid; gap: 16px; padding: 26px; }
+.dialog-close { position: absolute; right: 16px; top: 16px; display: grid; place-items: center; width: 36px; aspect-ratio: 1; padding: 0; border-radius: 50%; border: 1px solid var(--panel-border); background: var(--page); font-size: 1.45rem; line-height: 1; }
+.member-portrait { width: 90px; aspect-ratio: 1; border-radius: 18px; background: url("equipe-npcp.jpg") var(--portrait-position, 0% 0%) / 300% 200%; filter: hue-rotate(var(--portrait-hue, 0deg)); }
+.member-portrait.founder-portrait { background: url("arthur-corporal.jpg") right 29% / 170%; }
+.member-details h2 { font-size: clamp(1.75rem, 6vw, 2.6rem); overflow-wrap: anywhere; }
+.member-date { margin-top: 10px; color: var(--muted); }
+@media (min-width: 750px) { .founder { padding-right: 38%; } }
 @media (max-width: 980px) {
   .birthday-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -110,6 +127,7 @@ footer { padding-bottom: clamp(24px, 5vw, 64px); }
   .palette-label { display: none; }
   .hero::before { background-image: linear-gradient(90deg, var(--hero-shade) 5%, #11191055), url("hero-observatorio.jpg"); }
   .hero { padding-bottom: 100px; }
+  .founder::before { opacity: .53; }
   .insignia-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) {

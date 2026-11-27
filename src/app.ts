@@ -100,7 +100,11 @@ function render() {
   schedule.sort((a, b) => orderedNames ? alphabetical.compare(a.name, b.name) : a.birthday.midnight - b.birthday.midnight);
   const order = schedule.map(({ id }) => id).join(",");
   if (list && order !== currentOrder) {
-    for (const { card } of schedule) list.append(card);
+    const founder = schedule.find(({ id }) => id === "arthur");
+    if (founder) list.append(founder.card);
+    for (const { id, card } of schedule) {
+      if (id !== "arthur") list.append(card);
+    }
     currentOrder = order;
   }
   for (const { birthday, card, timer, digits, status, badge, progress } of schedule) {
@@ -205,5 +209,33 @@ if (signal && reception) {
     const active = signal.getAttribute("aria-expanded") !== "true";
     signal.setAttribute("aria-expanded", String(active));
     reception.toggleAttribute("hidden", !active);
+  });
+}
+
+const profile = document.querySelector<HTMLDialogElement>(".member-dialog");
+const profileName = profile?.querySelector("#member-name");
+const profileDate = profile?.querySelector(".member-date");
+const profilePortrait = profile?.querySelector<HTMLElement>(".member-portrait");
+if (profile && profileName && profileDate && profilePortrait && typeof profile.showModal === "function") {
+  for (const { card, name } of cards) {
+    const button = document.createElement("button");
+    button.className = "open-profile";
+    button.type = "button";
+    button.textContent = "Ver perfil";
+    button.setAttribute("aria-label", `Ver perfil de ${name}`);
+    button.setAttribute("aria-haspopup", "dialog");
+    card.querySelector(".birthday-heading")?.append(button);
+    button.addEventListener("click", () => {
+      profileName.textContent = card.dataset.fullName || name;
+      profileDate.textContent = card.querySelector("time")?.textContent ?? "";
+      profilePortrait.classList.toggle("founder-portrait", card.classList.contains("founder"));
+      for (const property of ["--portrait-position", "--portrait-hue"]) {
+        profilePortrait.style.setProperty(property, card.style.getPropertyValue(property));
+      }
+      profile.showModal();
+    });
+  }
+  profile.addEventListener("click", (event) => {
+    if (event.target === profile) profile.close();
   });
 }
