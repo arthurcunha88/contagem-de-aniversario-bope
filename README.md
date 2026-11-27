@@ -9,7 +9,7 @@ Agenda de aniversários do Núcleo de Projetos de Computação da CIMATEC jr.
 - A contagem regressiva usa o horário de Brasília. No dia do aniversário, o cartão mostra uma mensagem comemorativa. No dia seguinte, começa a contagem para a próxima ocorrência.
 - O próximo aniversário recebe destaque. A agenda pode ser ordenada por proximidade ou por nome. Arthur Cunha, criador do site e CEO da operação, tem um cartão fixo no topo. André Rangel e Pedro Mascarenhas têm cartões de destaque da gerência.
 - Cada cartão abre um perfil com avatar ilustrado, nome completo quando confirmado e dia e mês do aniversário. O perfil pode ser fechado pelo botão, pela tecla Esc ou por um clique no fundo.
-- A interface inclui paletas verde-oliva e noturna, um rádio-robô interativo e uma coleção de 40 emblemas. As animações respeitam a preferência de movimento reduzido do navegador.
+- A interface inclui paletas verde-oliva e noturna, um rádio-robô interativo e três emblemas que filtram a agenda por todos os perfis, próximos 30 dias ou destaques. As animações respeitam a preferência de movimento reduzido do navegador.
 
 ## Desenvolvimento local
 
@@ -34,7 +34,7 @@ Abra `dist/index.html` no navegador ou sirva a pasta `dist` com um servidor est�
 
 Edite ou adicione um cartão em `dist/index.html`. Use um identificador único em `data-member`, informe o nome de exibição no título e use `data-full-name` quando o nome completo estiver confirmado. Preencha o elemento `time` com o dia e o mês visíveis e com `datetime="MM-DD"`. O TypeScript lê a data diretamente do cartão.
 
-A agenda atual combina os membros confirmados no cruzamento das duas planilhas com os aniversários cadastrados anteriormente. O site e o repositório público guardam apenas dia e mês. O arquivo local `aniversarios.local.json`, quando presente, é ignorado pelo Git e fica fora da pasta publicada. O navegador usa `localStorage` para a preferência de paleta e os registros locais de aniversário.
+A agenda combina os membros confirmados no cruzamento das duas planilhas com as inclusões e exclusões solicitadas. O site e o repositório público guardam apenas dia e mês das datas de nascimento. O arquivo local `aniversarios.local.json`, quando presente, é ignorado pelo Git e fica fora da pasta publicada. O navegador usa `localStorage` para a preferência de paleta e os registros locais de aniversário.
 
 ## Publicação na Vercel
 

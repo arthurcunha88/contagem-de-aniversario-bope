@@ -80,6 +80,21 @@ const sortButton = document.querySelector                   (".sort-button");
 const alphabetical = new Intl.Collator("pt-BR");
 let orderedNames = false;
 let currentOrder = "";
+const filters = document.querySelector             (".agenda-filters");
+const filterButtons = [...document.querySelectorAll                   (".agenda-filter")];
+const filterResult = document.querySelector             (".filter-result");
+let activeFilter = "all";
+
+if (filters) filters.hidden = false;
+for (const button of filterButtons) {
+  button.addEventListener("click", () => {
+    activeFilter = button.dataset.filter ?? "all";
+    for (const option of filterButtons) {
+      option.setAttribute("aria-pressed", String(option === button));
+    }
+    render();
+  });
+}
 
 if (sortButton) {
   sortButton.hidden = false;
@@ -107,7 +122,14 @@ function render() {
     }
     currentOrder = order;
   }
+  let visible = 0;
   for (const { birthday, card, timer, digits, status, badge, progress } of schedule) {
+    const withinThirtyDays = birthday.midnight - now.getTime() <= 30 * 86400000;
+    const featured = card.classList.contains("leadership") || card.classList.contains("founder");
+    const matches = activeFilter === "all" || (activeFilter === "soon" && withinThirtyDays) ||
+      (activeFilter === "featured" && featured);
+    card.hidden = !matches;
+    if (matches) visible += 1;
     const remaining = birthday.digits;
     const celebrating = remaining === null;
     const upcoming = !celebrating && birthday.midnight === next;
@@ -128,6 +150,12 @@ function render() {
       digit.textContent = value;
     });
   }
+  if (filterResult) {
+    filterResult.hidden = activeFilter === "all";
+    const message = visible === 0 ? "Nenhum aniversário nos próximos 30 dias." :
+      `${visible} ${visible === 1 ? "perfil" : "perfis"} na seleção.`;
+    if (filterResult.textContent !== message) filterResult.textContent = message;
+  }
 }
 
 render();
@@ -135,17 +163,6 @@ setInterval(render, 1000);
 document.addEventListener("visibilitychange", render);
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const insigniaGrid = document.querySelector(".insignia-grid");
-if (insigniaGrid) {
-  const badges = Array.from({ length: 40 }, (_, index) => {
-    const badge = document.createElement("span");
-    badge.className = "insignia";
-    badge.dataset.reveal = "";
-    badge.style.backgroundPosition = `${(index % 10) * 100 / 9}% ${Math.floor(index / 10) * 100 / 3}%`;
-    return badge;
-  });
-  insigniaGrid.append(...badges);
-}
 const reveal = document.querySelectorAll             ("[data-reveal]");
 
 if (typeof IntersectionObserver === "function") {
@@ -156,11 +173,10 @@ if (typeof IntersectionObserver === "function") {
         directions.set(entry.target, entry.boundingClientRect.top < 0 ? -1 : 1);
       } else if (!reducedMotion.matches) {
         const distance = (directions.get(entry.target) ?? 1) * 21;
-        const isInsignia = entry.target.classList.contains("insignia");
         entry.target.animate([
           { opacity: .48, transform: `translateY(${distance}px) scale(.985)` },
           { opacity: 1, transform: "translateY(0) scale(1)" },
-        ], { duration: 480, delay: isInsignia ? entries.indexOf(entry) % 8 * 26 : 0, easing: "cubic-bezier(.19, 1, .22, 1)", fill: "backwards" });
+        ], { duration: 480, easing: "cubic-bezier(.19, 1, .22, 1)", fill: "backwards" });
       }
     }
   }, { threshold: 0.14 });

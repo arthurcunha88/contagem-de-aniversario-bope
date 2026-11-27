@@ -46,6 +46,12 @@
         <div><p class="kicker">Horário de Brasília</p><h2 id="agenda-title">Próximos eventos</h2></div>
         <button class="sort-button" type="button" aria-pressed="false" hidden>Ordem alfabética</button>
       </div>
+      <div class="agenda-filters" role="group" aria-label="Filtrar aniversários" hidden>
+        <button class="agenda-filter" type="button" data-filter="all" aria-pressed="true" aria-controls="birthdays"><span class="filter-emblem emblem-all" aria-hidden="true"></span>Todos</button>
+        <button class="agenda-filter" type="button" data-filter="soon" aria-pressed="false" aria-controls="birthdays"><span class="filter-emblem emblem-soon" aria-hidden="true"></span>Próximos 30 dias</button>
+        <button class="agenda-filter" type="button" data-filter="featured" aria-pressed="false" aria-controls="birthdays"><span class="filter-emblem emblem-featured" aria-hidden="true"></span>Destaques</button>
+      </div>
+      <p class="filter-result" role="status" hidden></p>
       <div class="birthday-list" id="birthdays">
         <!-- Birthdays are in HTML so dates remain readable without JavaScript. -->
         <article class="birthday founder" data-reveal data-member="arthur" data-full-name="Arthur Andrade Cunha" style="--portrait-position:100% 0%;--portrait-hue:0deg">
@@ -67,15 +73,6 @@
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
-        <article class="birthday has-portrait" data-reveal data-member="igor" data-full-name="Igor Lima Carvalho" style="--portrait-position:50% 0%;--portrait-hue:0deg">
-          <div class="birthday-heading">
-            <h3>Igor Carvalho</h3><time datetime="04-03">3 de abril</time>
-          </div>
-          <p class="status" hidden></p>
-          <div class="timer" role="timer" aria-label="Tempo até o aniversário de Igor Carvalho">
-            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
-          </div>
-        </article>
         <article class="birthday has-portrait" data-reveal data-member="alice" data-full-name="" style="--portrait-position:0% 0%;--portrait-hue:0deg">
           <div class="birthday-heading">
             <h3>Alice Alves</h3><time datetime="04-03">3 de abril</time>
@@ -91,15 +88,6 @@
           </div>
           <p class="status" hidden></p>
           <div class="timer" role="timer" aria-label="Tempo até o aniversário de Enzo Almeida">
-            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
-          </div>
-        </article>
-        <article class="birthday has-portrait" data-reveal data-member="gustavo" data-full-name="Gustavo Maia de Jesus" style="--portrait-position:50% 100%;--portrait-hue:0deg">
-          <div class="birthday-heading">
-            <h3>Gustavo Maia</h3><time datetime="05-27">27 de maio</time>
-          </div>
-          <p class="status" hidden></p>
-          <div class="timer" role="timer" aria-label="Tempo até o aniversário de Gustavo Maia">
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
@@ -195,21 +183,22 @@
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
-        <article class="birthday has-portrait" data-reveal data-member="miguel" data-full-name="Miguel Carmo de Aquino" style="--portrait-position:50% 100%;--portrait-hue:8deg">
-          <div class="birthday-heading">
-            <h3>Miguel Aquino</h3><time datetime="12-05">5 de dezembro</time>
-          </div>
-          <p class="status" hidden></p>
-          <div class="timer" role="timer" aria-label="Tempo até o aniversário de Miguel Aquino">
-            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
-          </div>
-        </article>
         <article class="birthday has-portrait" data-reveal data-member="kaio" data-full-name="Kaio André Macedo da Soledade" style="--portrait-position:100% 0%;--portrait-hue:-6deg">
           <div class="birthday-heading">
             <h3>Kaio Soledade</h3><time datetime="12-12">12 de dezembro</time>
           </div>
           <p class="status" hidden></p>
           <div class="timer" role="timer" aria-label="Tempo até o aniversário de Kaio Soledade">
+            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
+          </div>
+        </article>
+        <article class="birthday has-portrait" data-reveal data-member="amanda" data-full-name="Amanda Gama Lordello" data-profile-role="DEX" style="--portrait-position:0% 0%;--portrait-hue:19deg">
+          <div class="birthday-heading">
+            <p class="kicker affiliation">DEX</p>
+            <h3>Amanda Lordello</h3><time datetime="08-20">20 de agosto</time>
+          </div>
+          <p class="status" hidden></p>
+          <div class="timer" role="timer" aria-label="Tempo até o aniversário de Amanda Lordello">
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
@@ -230,11 +219,5 @@
       </div>
     </div>
   </dialog>
-  <footer class="shell">
-    <section class="insignia-deck" aria-labelledby="insignia-title">
-      <div data-reveal><p class="kicker">NPCP BOPE</p><h2 id="insignia-title">Coleção de emblemas</h2></div>
-      <div class="insignia-grid" aria-hidden="true"></div>
-    </section>
-  </footer>
 </body>
 </html>
