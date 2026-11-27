@@ -214,9 +214,10 @@ if (signal && reception) {
 
 const profile = document.querySelector                   (".member-dialog");
 const profileName = profile?.querySelector("#member-name");
-const profileDate = profile?.querySelector(".member-date");
+const profileDate = profile?.querySelector                 (".member-date time");
+const profileRole = profile?.querySelector(".member-role");
 const profilePortrait = profile?.querySelector             (".member-portrait");
-if (profile && profileName && profileDate && profilePortrait && typeof profile.showModal === "function") {
+if (profile && profileName && profileDate && profileRole && profilePortrait && typeof profile.showModal === "function") {
   for (const { card, name } of cards) {
     const button = document.createElement("button");
     button.className = "open-profile";
@@ -227,8 +228,13 @@ if (profile && profileName && profileDate && profilePortrait && typeof profile.s
     card.querySelector(".birthday-heading")?.append(button);
     button.addEventListener("click", () => {
       profileName.textContent = card.dataset.fullName || name;
-      profileDate.textContent = card.querySelector("time")?.textContent ?? "";
-      profilePortrait.classList.toggle("founder-portrait", card.classList.contains("founder"));
+      const date = card.querySelector("time");
+      profileDate.textContent = date?.textContent ?? "";
+      profileDate.dateTime = date?.dateTime ?? "";
+      const founder = card.classList.contains("founder");
+      profileRole.textContent = card.dataset.profileRole ?? (founder ? "Criador do site · CEO da operação" : "Perfil do membro");
+      profile.classList.toggle("leadership-profile", card.classList.contains("leadership"));
+      profilePortrait.classList.toggle("founder-portrait", founder);
       for (const property of ["--portrait-position", "--portrait-hue"]) {
         profilePortrait.style.setProperty(property, card.style.getPropertyValue(property));
       }
