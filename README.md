@@ -1,10 +1,11 @@
 # Aniversários do NPCP
 
-Landing page do Núcleo de Projetos de Computação da CIMATEC jr para acompanhar os aniversários de André Rangel, Arthur Cunha e Duda Lombardi.
+Landing page do Núcleo de Projetos de Computação da CIMATEC jr. A agenda conta o tempo até os aniversários e destaca Arthur Cunha, criador do site e CEO da operação.
 
 ## Como funciona
 
 - Os contadores mostram dias, horas, minutos e segundos no horário de Brasília.
+- A agenda pode ser ordenada por proximidade ou alfabeticamente. A paleta é salva no navegador.
 - No dia do aniversário, o cartão exibe uma mensagem de parabéns. No dia seguinte, o contador passa para o próximo ano.
 - As animações respeitam a preferência de movimento reduzido do navegador.
 - O HTML inclui nomes, datas e metadados para busca e compartilhamento. O JavaScript atualiza apenas os contadores e o estado dos cartões.

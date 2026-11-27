@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-palette="olive">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#141a12">
-  <title>Aniversários do NPCP</title>
-  <meta name="description" content="Acompanhe a contagem regressiva para os aniversários de André Rangel, Arthur Cunha e Duda Lombardi no Núcleo de Projetos de Computação.">
+  <meta name="theme-color" content="#192017">
+  <title>Aniversários do NPCP | Operação Parabéns</title>
+  <meta name="description" content="Agenda de aniversários do NPCP, com contagem regressiva no horário de Brasília.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="NPCP">
-  <meta property="og:title" content="Aniversários do NPCP">
-  <meta property="og:description" content="Confira as próximas datas e celebre quem faz parte do nosso núcleo.">
+  <meta property="og:title" content="Aniversários do NPCP | Operação Parabéns">
+  <meta property="og:description" content="O calendário de aniversários do Núcleo de Projetos de Computação.">
   <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://contagem-de-aniversario-bope.vercel.app/">
   <meta property="og:url" content="https://contagem-de-aniversario-bope.vercel.app/">
@@ -19,56 +19,102 @@
   <script defer src="app.js"></script>
 </head>
 <body>
-  <header class="shell masthead">
-    <a class="brand" href="./"><img class="mark" src="capacete-npcp.png" width="40" height="40" alt=""><span>NPCP <span class="accent">BOPE</span></span></a>
-    <nav aria-label="Navegação principal"><a class="nav" href="#calendario">Agenda do núcleo</a></nav>
+  <header class="topbar shell">
+    <a class="brand" href="#inicio"><img src="capacete-npcp.png" width="32" height="32" alt=""> NPCP <span>BOPE</span></a>
+    <div class="top-actions">
+      <a href="#agenda">Agenda</a>
+      <button type="button" class="palette-toggle" aria-label="Ativar paleta noturna" aria-pressed="false" hidden><span aria-hidden="true">◐</span> <span class="palette-label">Modo noturno</span></button>
+    </div>
   </header>
-  <main class="shell">
+  <main class="shell" id="inicio">
     <section class="hero" aria-labelledby="titulo">
-      <div>
-        <h1 id="titulo">Operação<br><em>Parabéns</em></h1>
-        <p class="intro">Aniversários do NPCP. A missão é soprar as velas.</p>
-        <a class="cta" href="#calendario">Ver próximas datas</a>
+      <div class="hero-content">
+        <p class="kicker">Calendário do NPCP</p>
+        <h1 id="titulo">Operação<br><em>Parabéns.</em></h1>
+        <p class="tagline">Aniversários em vista. Preparem o bolo.</p>
+        <a class="primary" href="#agenda">Consultar agenda <span aria-hidden="true">↓</span></a>
       </div>
-      <div class="art" aria-hidden="true">
-        <div class="orbital-field">
-          <div class="orbit orbit-one"><i></i></div>
-          <div class="orbit orbit-two"><i></i></div>
-          <div class="orb"></div>
-        </div>
-        <span class="spark spark-top">✦</span>
-        <span class="spark spark-side">✧</span>
-        <span class="spark spark-bottom">✦</span>
+      <div class="radio">
+        <p class="reception" id="reception" role="status" hidden>Câmbio. Bolo confirmado!</p>
+        <button class="signal" type="button" aria-label="Testar sinal do rádio" aria-controls="reception" aria-expanded="false" hidden>
+          <img src="radio-robo.png" width="100" height="100" alt="">
+        </button>
       </div>
     </section>
-    <section id="calendario" aria-labelledby="agenda">
-      <div class="section-head"><h2 id="agenda">Próximos eventos do NPCP</h2><p>Horário de Brasília</p></div>
-      <div class="cards">
-        <article class="card" data-member="andre">
-          <div class="person"><h3>André Rangel</h3><time datetime="06-05">5 de junho</time></div>
-          <p class="status" hidden></p>
-          <div class="timer" role="timer" aria-label="Tempo até o aniversário de André Rangel">
-            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
+    <section id="agenda" aria-labelledby="agenda-title">
+      <div class="section-heading" data-reveal>
+        <div><p class="kicker">Horário de Brasília</p><h2 id="agenda-title">Próximos eventos</h2></div>
+        <button class="sort-button" type="button" aria-pressed="false" hidden>Ordem alfabética</button>
+      </div>
+      <div class="birthday-list" id="birthdays">
+        <!-- Birthdays are in HTML so dates remain readable without JavaScript. -->
+        <article class="birthday founder" data-reveal data-member="arthur">
+          <div class="birthday-heading">
+            <p class="kicker founder-label">Criador do site · CEO da operação</p>
+            <h3>Arthur Cunha</h3><time datetime="08-12">12 de agosto</time>
           </div>
-        </article>
-        <article class="card" data-member="arthur">
-          <div class="person"><h3>Arthur Cunha</h3><time datetime="08-12">12 de agosto</time></div>
           <p class="status" hidden></p>
           <div class="timer" role="timer" aria-label="Tempo até o aniversário de Arthur Cunha">
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
-        <article class="card" data-member="duda">
-          <div class="person"><h3>Duda Lombardi</h3><time datetime="11-20">20 de novembro</time></div>
+        <article class="birthday" data-reveal data-member="alice">
+          <div class="birthday-heading">
+            <h3>Alice Alves</h3><time datetime="04-03">3 de abril</time>
+          </div>
+          <p class="status" hidden></p>
+          <div class="timer" role="timer" aria-label="Tempo até o aniversário de Alice Alves">
+            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
+          </div>
+        </article>
+        <article class="birthday" data-reveal data-member="enzo">
+          <div class="birthday-heading">
+            <h3>Enzo Almeida</h3><time datetime="05-15">15 de maio</time>
+          </div>
+          <p class="status" hidden></p>
+          <div class="timer" role="timer" aria-label="Tempo até o aniversário de Enzo Almeida">
+            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
+          </div>
+        </article>
+        <article class="birthday" data-reveal data-member="marcus">
+          <div class="birthday-heading">
+            <h3>Marcus Costa</h3><time datetime="05-27">27 de maio</time>
+          </div>
+          <p class="status" hidden></p>
+          <div class="timer" role="timer" aria-label="Tempo até o aniversário de Marcus Costa">
+            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
+          </div>
+        </article>
+        <article class="birthday" data-reveal data-member="piloto">
+          <div class="birthday-heading">
+            <h3>Arthur Piloto</h3><time datetime="05-30">30 de maio</time>
+          </div>
+          <p class="status" hidden></p>
+          <div class="timer" role="timer" aria-label="Tempo até o aniversário de Arthur Piloto">
+            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
+          </div>
+        </article>
+        <article class="birthday" data-reveal data-member="andre">
+          <div class="birthday-heading">
+            <h3>André Rangel</h3><time datetime="06-05">5 de junho</time>
+          </div>
+          <p class="status" hidden></p>
+          <div class="timer" role="timer" aria-label="Tempo até o aniversário de André Rangel">
+            <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
+          </div>
+        </article>
+        <article class="birthday" data-reveal data-member="duda">
+          <div class="birthday-heading">
+            <h3>Duda Lombardi</h3><time datetime="11-20">20 de novembro</time>
+          </div>
           <p class="status" hidden></p>
           <div class="timer" role="timer" aria-label="Tempo até o aniversário de Duda Lombardi">
             <span><b>–</b>dias</span><span><b>–</b>horas</span><span><b>–</b>min</span><span><b>–</b>seg</span>
           </div>
         </article>
       </div>
-      <noscript><p>Ative o JavaScript para acompanhar a contagem regressiva.</p></noscript>
     </section>
   </main>
-  <footer class="shell">NPCP BOPE <span>·</span> CIMATEC jr</footer>
+  <footer class="shell"><span>NPCP BOPE</span><a href="#inicio">Voltar ao topo ↑</a></footer>
 </body>
 </html>

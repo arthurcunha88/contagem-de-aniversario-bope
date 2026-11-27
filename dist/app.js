@@ -2,6 +2,10 @@
                                                                                         
 
 const defaults                      = [
+  { id: "alice", day: 3, month: 4 },
+  { id: "enzo", day: 15, month: 5 },
+  { id: "marcus", day: 27, month: 5 },
+  { id: "piloto", day: 30, month: 5 },
   { id: "andre", day: 5, month: 6 },
   { id: "arthur", day: 12, month: 8 },
   { id: "duda", day: 20, month: 11 },
@@ -62,15 +66,31 @@ const cards = defaults.flatMap(({ id, month, day }) => {
   badge.className = "next-birthday";
   badge.textContent = "Próximo aniversário";
   badge.hidden = true;
-  card.querySelector(".person")?.prepend(badge);
+  card.querySelector(".birthday-heading")?.prepend(badge);
 
   const progress = document.createElement("progress");
   progress.className = "year-progress";
   progress.max = 100;
   progress.setAttribute("aria-label", "Progresso do ciclo até o aniversário");
   card.append(progress);
-  return [{ month, day, card, timer, digits: [...timer.querySelectorAll("b")], status, badge, progress }];
+  const name = card.querySelector("h3")?.textContent ?? "";
+  return [{ id, name, month, day, card, timer, digits: [...timer.querySelectorAll("b")], status, badge, progress }];
 });
+
+const list = document.querySelector("#birthdays");
+const sortButton = document.querySelector                   (".sort-button");
+const alphabetical = new Intl.Collator("pt-BR");
+let orderedNames = false;
+let currentOrder = "";
+
+if (sortButton) {
+  sortButton.hidden = false;
+  sortButton.addEventListener("click", () => {
+    orderedNames = !orderedNames;
+    sortButton.setAttribute("aria-pressed", String(orderedNames));
+    render();
+  });
+}
 
 function render() {
   const now = new Date();
@@ -78,7 +98,17 @@ function render() {
     ...entry,
     birthday: timeUntilBirthday(entry.month, entry.day, now),
   }));
-  const next = Math.min(...schedule.map(({ birthday }) => birthday.midnight));
+  const next = Math.min(...schedule.flatMap(({ birthday }) => birthday.digits ? [birthday.midnight] : []));
+  schedule.sort((a, b) => orderedNames ? alphabetical.compare(a.name, b.name) : a.birthday.midnight - b.birthday.midnight);
+  const order = schedule.map(({ id }) => id).join(",");
+  if (list && order !== currentOrder) {
+    const founder = schedule.find(({ id }) => id === "arthur");
+    if (founder) list.append(founder.card);
+    for (const { id, card } of schedule) {
+      if (id !== "arthur") list.append(card);
+    }
+    currentOrder = order;
+  }
   for (const { birthday, card, timer, digits, status, badge, progress } of schedule) {
     const remaining = birthday.digits;
     const celebrating = remaining === null;
@@ -107,15 +137,67 @@ setInterval(render, 1000);
 document.addEventListener("visibilitychange", render);
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const reveal = document.querySelectorAll             (".section-head, .card");
+const reveal = document.querySelectorAll             ("[data-reveal]");
 
-if (!reducedMotion.matches && typeof IntersectionObserver === "function") {
-  const observer = new IntersectionObserver((entries, activeObserver) => {
+if (typeof IntersectionObserver === "function") {
+  const directions = new WeakMap                 ();
+  const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      entry.target.classList.add("in-view");
-      activeObserver.unobserve(entry.target);
+      if (!entry.isIntersecting) {
+        directions.set(entry.target, entry.boundingClientRect.top < 0 ? -1 : 1);
+      } else if (!reducedMotion.matches) {
+        const distance = (directions.get(entry.target) ?? 1) * 21;
+        entry.target.animate([
+          { opacity: .48, transform: `translateY(${distance}px) scale(.985)` },
+          { opacity: 1, transform: "translateY(0) scale(1)" },
+        ], { duration: 480, easing: "cubic-bezier(.19, 1, .22, 1)" });
+      }
     }
   }, { threshold: 0.14 });
   reveal.forEach((element) => observer.observe(element));
+}
+
+const hero = document.querySelector             (".hero");
+let pendingFrame = false;
+function updateHero() {
+  if (!hero || pendingFrame) return;
+  pendingFrame = true;
+  requestAnimationFrame(() => {
+    pendingFrame = false;
+    const offset = reducedMotion.matches ? 0 : Math.min(32, Math.max(0, -hero.getBoundingClientRect().top * .24));
+    hero.style.setProperty("--hero-offset", `${offset}px`);
+  });
+}
+window.addEventListener("scroll", updateHero, { passive: true });
+reducedMotion.addEventListener("change", updateHero);
+updateHero();
+
+const paletteToggle = document.querySelector                   (".palette-toggle");
+const paletteLabel = document.querySelector(".palette-label");
+const paletteKey = "npcpbope:palette";
+function setPalette(night         ) {
+  document.documentElement.dataset.palette = night ? "night" : "olive";
+  paletteToggle?.setAttribute("aria-pressed", String(night));
+  paletteToggle?.setAttribute("aria-label", night ? "Ativar paleta verde" : "Ativar paleta noturna");
+  if (paletteLabel) paletteLabel.textContent = night ? "Modo verde" : "Modo noturno";
+}
+if (paletteToggle) {
+  paletteToggle.hidden = false;
+  try { setPalette(localStorage.getItem(paletteKey) === "night"); } catch { /* optional preference */ }
+  paletteToggle.addEventListener("click", () => {
+    const night = document.documentElement.dataset.palette !== "night";
+    setPalette(night);
+    try { localStorage.setItem(paletteKey, night ? "night" : "olive"); } catch { /* optional preference */ }
+  });
+}
+
+const signal = document.querySelector                   (".signal");
+const reception = document.querySelector(".reception");
+if (signal && reception) {
+  signal.hidden = false;
+  signal.addEventListener("click", () => {
+    const active = signal.getAttribute("aria-expanded") !== "true";
+    signal.setAttribute("aria-expanded", String(active));
+    reception.toggleAttribute("hidden", !active);
+  });
 }
