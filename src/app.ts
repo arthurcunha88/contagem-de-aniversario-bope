@@ -29,23 +29,28 @@ const brasilia = new Intl.DateTimeFormat("en-CA", {
   day: "2-digit",
 });
 
-function timeUntilBirthday(month: number, day: number, now: Date): number[] | null {
+function timeUntilBirthday(month: number, day: number, now: Date) {
   const current = Object.fromEntries(
     brasilia.formatToParts(now).map(({ type, value }) => [type, Number(value)]),
   );
-  if (current.month === month && current.day === day) return null;
+  if (current.month === month && current.day === day) {
+    return { midnight: now.getTime(), progress: 100, digits: null };
+  }
 
   const passed = current.month > month || (current.month === month && current.day > day);
   const targetYear = current.year + Number(passed);
   // Brasília midnight is 03:00 UTC under the current rules.
   const midnight = Date.UTC(targetYear, month - 1, day, 3);
   const seconds = Math.ceil((midnight - now.getTime()) / 1000);
-  return [
+  const previous = Date.UTC(targetYear - 1, month - 1, day, 3);
+  const progress = 100 * (now.getTime() - previous) / (midnight - previous);
+  const digits = [
     Math.floor(seconds / 86400),
     Math.floor(seconds / 3600) % 24,
     Math.floor(seconds / 60) % 60,
     seconds % 60,
   ];
+  return { midnight, progress, digits };
 }
 
 const cards = defaults.flatMap(({ id, month, day }) => {
@@ -53,14 +58,35 @@ const cards = defaults.flatMap(({ id, month, day }) => {
   const timer = card?.querySelector<HTMLElement>(".timer");
   const status = card?.querySelector<HTMLElement>(".status");
   if (!card || !timer || !status) return [];
-  return [{ month, day, card, timer, digits: [...timer.querySelectorAll("b")], status }];
+  const badge = document.createElement("span");
+  badge.className = "next-birthday";
+  badge.textContent = "Próximo aniversário";
+  badge.hidden = true;
+  card.querySelector(".person")?.prepend(badge);
+
+  const progress = document.createElement("progress");
+  progress.className = "year-progress";
+  progress.max = 100;
+  progress.setAttribute("aria-label", "Progresso do ciclo até o aniversário");
+  card.append(progress);
+  return [{ month, day, card, timer, digits: [...timer.querySelectorAll("b")], status, badge, progress }];
 });
 
 function render() {
   const now = new Date();
-  for (const { month, day, card, timer, digits, status } of cards) {
-    const remaining = timeUntilBirthday(month, day, now);
+  const schedule = cards.map((entry) => ({
+    ...entry,
+    birthday: timeUntilBirthday(entry.month, entry.day, now),
+  }));
+  const next = Math.min(...schedule.map(({ birthday }) => birthday.midnight));
+  for (const { birthday, card, timer, digits, status, badge, progress } of schedule) {
+    const remaining = birthday.digits;
     const celebrating = remaining === null;
+    const upcoming = !celebrating && birthday.midnight === next;
+    badge.hidden = !upcoming;
+    card.classList.toggle("upcoming", upcoming);
+    const percent = Math.floor(birthday.progress);
+    if (progress.value !== percent) progress.value = percent;
     card.classList.toggle("today", celebrating);
     if (celebrating !== timer.hidden) {
       timer.hidden = celebrating;
